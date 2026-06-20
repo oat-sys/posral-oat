@@ -204,8 +204,7 @@ end)
 
 local Window = Library:CreateWindow({
     Title = "Posral",
-    Footer = "Leaked by Oat",
-    Icon = "81999364699599",
+    Footer = "version: Иди нахуй не читай",
     NotifySide = "Right",
 })
 
