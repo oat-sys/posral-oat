@@ -204,8 +204,13 @@ end)
 
 local Window = Library:CreateWindow({
     Title = "Posral",
-    Footer = "version: Иди нахуй не читай",
+    Footer = "Leaked by Oat",
+    Icon = "81999364699599",
     NotifySide = "Right",
+    ShowCustomCursor = false,
+    Enable Compacting = true,
+    SidebarCompacted = true,
+    CornerRadius = 15
 })
 
 local Tabs = {
