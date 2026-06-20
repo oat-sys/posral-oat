@@ -207,9 +207,6 @@ local Window = Library:CreateWindow({
     Footer = "Leaked by Oat",
     Icon = "81999364699599",
     NotifySide = "Right",
-    ShowCustomCursor = false,
-    Enable Compacting = true,
-    SidebarCompacted = true,
     CornerRadius = 15
 })
 
