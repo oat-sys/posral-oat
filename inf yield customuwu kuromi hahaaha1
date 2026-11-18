@@ -398,138 +398,174 @@ table.insert(shade1,Title)
 table.insert(text1,Title)
 
 do
-	-- ===== หูแมว 2 ข้าง (ตั้งตรง) =====
-	local function makeCatEar(xPos)
-		-- ใบหูนอก (ดำ)
-		local ear = Instance.new("Frame")
-		ear.Name = randomString()
-		ear.Size = UDim2.new(0, 14, 0, 22)
-		ear.Position = UDim2.new(0, xPos, 0, -20)
-		ear.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-		ear.BorderSizePixel = 0
-		ear.ZIndex = 11
-		ear.Parent = Holder
-		table.insert(shade1, ear)
+	-- ===== kitty ears (pointy triangles) =====
+	-- Each ear is a square turned 45 degrees with its centre on the top edge
+	-- of the window, so only the top half (a triangle) shows above the title bar.
+	-- They are left out of the shade tables on purpose, so themes keep their colours.
+	local EAR_DARK  = Color3.fromRGB(28, 24, 34)    -- soft black
+	local EAR_PINK  = Color3.fromRGB(255, 170, 210) -- inner ear
+	local BOW_PINK  = Color3.fromRGB(255, 125, 185)
+	local BOW_DEEP  = Color3.fromRGB(215, 70, 145)
+	local SPARKLE   = Color3.fromRGB(255, 240, 250)
 
-		local c1 = Instance.new("UICorner")
-		c1.CornerRadius = UDim.new(0, 8)  -- มนแค่ปลายบน
-		c1.Parent = ear
-
-		-- ใบหูใน (ชมพูอ่อน)
-		local inner = Instance.new("Frame")
-		inner.Name = randomString()
-		inner.Size = UDim2.new(0, 8, 0, 14)
-		inner.Position = UDim2.new(0.5, -4, 0.5, -7)
-		inner.BackgroundColor3 = Color3.fromRGB(255, 180, 220)
-		inner.BorderSizePixel = 0
-		inner.ZIndex = 12
-		inner.Parent = ear
-		table.insert(shade3, inner)
-
-		local c2 = Instance.new("UICorner")
-		c2.CornerRadius = UDim.new(0, 5)
-		c2.Parent = inner
-
-		-- ปลายหู (ม่วง)
-		local tip = Instance.new("Frame")
-		tip.Name = randomString()
-		tip.Size = UDim2.new(0, 9, 0, 8)
-		tip.Position = UDim2.new(0.5, -4.5, 0, 0)
-		tip.BackgroundColor3 = Color3.fromRGB(140, 60, 180)
-		tip.BorderSizePixel = 0
-		tip.ZIndex = 13
-		tip.Parent = ear
-		table.insert(shade3, tip)
-
-		local c3 = Instance.new("UICorner")
-		c3.CornerRadius = UDim.new(0, 6)
-		c3.Parent = tip
+	local function rounded(obj, r)
+		local c = Instance.new("UICorner")
+		c.CornerRadius = r or UDim.new(0, 4)
+		c.Parent = obj
 	end
 
-	-- หูซ้าย-ขวา ตำแหน่งบนหัว Title
-	makeCatEar(30)    -- ซ้าย
-	makeCatEar(206)   -- ขวา
+	local function makeCatEar(xCenter, tilt)
+		local ear = Instance.new("Frame")
+		ear.Name = randomString()
+		ear.AnchorPoint = Vector2.new(0.5, 0.5)
+		ear.Size = UDim2.new(0, 34, 0, 34)
+		ear.Position = UDim2.new(0, xCenter, 0, 4)
+		ear.Rotation = 45 + tilt
+		ear.BackgroundColor3 = EAR_DARK
+		ear.BorderSizePixel = 0
+		ear.ZIndex = 8 -- behind the title bar, so the bottom half is hidden
+		ear.Parent = Holder
+		rounded(ear, UDim.new(0, 5))
 
-	-- ===== หางแมว (กลางด้านบน GUI + โยกเยกได้) =====
-	-- ใช้ Frame แม่เป็นตัวหมุน (pivot อยู่ที่โคน)
-	local tailPivot = Instance.new("Frame")
-	tailPivot.Name = randomString()
-	tailPivot.Size = UDim2.new(0, 40, 0, 40)
-	tailPivot.Position = UDim2.new(0.5, -20, 0, -38)
-	tailPivot.BackgroundTransparency = 1
-	tailPivot.ZIndex = 15
-	tailPivot.Parent = Holder
+		local inner = Instance.new("Frame")
+		inner.Name = randomString()
+		inner.AnchorPoint = Vector2.new(0.5, 0.5)
+		inner.Size = UDim2.new(0, 19, 0, 19)
+		inner.Position = UDim2.new(0, xCenter, 0, 7)
+		inner.Rotation = 45 + tilt
+		inner.BackgroundColor3 = EAR_PINK
+		inner.BorderSizePixel = 0
+		inner.ZIndex = 9
+		inner.Parent = Holder
+		rounded(inner, UDim.new(0, 4))
 
-	-- ท่อนหางที่ 1 (โคน - ใหญ่)
-	local t1 = Instance.new("Frame")
-	t1.Name = randomString()
-	t1.Size = UDim2.new(0, 6, 0, 12)
-	t1.Position = UDim2.new(0.5, -3, 1, -12)
-	t1.BackgroundColor3 = Color3.fromRGB(25, 25, 30)
-	t1.BorderSizePixel = 0
-	t1.ZIndex = 15
-	t1.Parent = tailPivot
-	table.insert(shade1, t1)
-	local ct1 = Instance.new("UICorner")
-	ct1.CornerRadius = UDim.new(0.5, 0)
-	ct1.Parent = t1
+		return ear, inner
+	end
 
-	-- ท่อนหางที่ 2 (กลาง - โค้ง)
-	local t2 = Instance.new("Frame")
-	t2.Name = randomString()
-	t2.Size = UDim2.new(0, 6, 0, 12)
-	t2.Position = UDim2.new(0.5, -3, 1, -22)
-	t2.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-	t2.BorderSizePixel = 0
-	t2.Rotation = -10
-	t2.ZIndex = 15
-	t2.Parent = tailPivot
-	table.insert(shade1, t2)
-	local ct2 = Instance.new("UICorner")
-	ct2.CornerRadius = UDim.new(0.5, 0)
-	ct2.Parent = t2
+	local leftEar, leftInner   = makeCatEar(46, -8)  -- tilted a little outward
+	local rightEar, rightInner = makeCatEar(204, 8)
 
-	-- ท่อนหางที่ 3 (ปลาย - สีม่วง)
-	local t3 = Instance.new("Frame")
-	t3.Name = randomString()
-	t3.Size = UDim2.new(0, 7, 0, 10)
-	t3.Position = UDim2.new(0.5, -3.5, 1, -31)
-	t3.BackgroundColor3 = Color3.fromRGB(140, 60, 180)
-	t3.BorderSizePixel = 0
-	t3.Rotation = -20
-	t3.ZIndex = 16
-	t3.Parent = tailPivot
-	table.insert(shade3, t3)
-	local ct3 = Instance.new("UICorner")
-	ct3.CornerRadius = UDim.new(0.5, 0)
-	ct3.Parent = t3
+	-- ===== pink kitty bow, top middle =====
+	local bow = Instance.new("Frame")
+	bow.Name = randomString()
+	bow.AnchorPoint = Vector2.new(0.5, 0.5)
+	bow.Size = UDim2.new(0, 30, 0, 18)
+	bow.Position = UDim2.new(0.5, 0, 0, -11)
+	bow.Rotation = 0
+	bow.BackgroundTransparency = 1
+	bow.ZIndex = 12
+	bow.Parent = Holder
 
-	-- ไฮไลต์ปลายหาง
-	local highlight = Instance.new("Frame")
-	highlight.Name = randomString()
-	highlight.Size = UDim2.new(0, 3, 0, 3)
-	highlight.Position = UDim2.new(0.2, 0, 0.15, 0)
-	highlight.BackgroundColor3 = Color3.fromRGB(255, 200, 255)
-	highlight.BorderSizePixel = 0
-	highlight.ZIndex = 17
-	highlight.Parent = t3
+	local function bowPiece(size, pos, rot, color, z, radius)
+		local f = Instance.new("Frame")
+		f.Name = randomString()
+		f.AnchorPoint = Vector2.new(0.5, 0.5)
+		f.Size = size
+		f.Position = pos
+		f.Rotation = rot
+		f.BackgroundColor3 = color
+		f.BorderSizePixel = 0
+		f.ZIndex = z
+		f.Parent = bow
+		rounded(f, radius or UDim.new(0.5, 0))
+		local s = Instance.new("UIStroke")
+		s.Color = BOW_DEEP
+		s.Thickness = 1.5
+		s.Parent = f
+		return f
+	end
 
-	local ch = Instance.new("UICorner")
-	ch.CornerRadius = UDim.new(0.5, 0)
-	ch.Parent = highlight
+	-- little ribbon tails hanging down
+	bowPiece(UDim2.new(0, 5, 0, 10), UDim2.new(0.5, -4, 0.5, 7), 25, BOW_PINK, 12, UDim.new(0, 2))
+	bowPiece(UDim2.new(0, 5, 0, 10), UDim2.new(0.5, 4, 0.5, 7), -25, BOW_PINK, 12, UDim.new(0, 2))
+	-- the two loops
+	local loopL = bowPiece(UDim2.new(0, 13, 0, 11), UDim2.new(0.5, -7, 0.5, 0), -18, BOW_PINK, 13)
+	local loopR = bowPiece(UDim2.new(0, 13, 0, 11), UDim2.new(0.5, 7, 0.5, 0), 18, BOW_PINK, 13)
+	-- the knot in the middle
+	bowPiece(UDim2.new(0, 7, 0, 7), UDim2.new(0.5, 0, 0.5, 0), 0, BOW_DEEP, 14)
 
-	-- ===== แอนิเมชันโยกเยก (wag) =====
-	local wagTime = 0
-	local wagSpeed = 0.15
-	local wagAmount = 15 -- องศาเอียงซ้าย-ขวา
+	-- shiny dots on the loops
+	for _, loop in ipairs({loopL, loopR}) do
+		local dot = Instance.new("Frame")
+		dot.Name = randomString()
+		dot.Size = UDim2.new(0, 3, 0, 3)
+		dot.Position = UDim2.new(0.25, 0, 0.2, 0)
+		dot.BackgroundColor3 = SPARKLE
+		dot.BorderSizePixel = 0
+		dot.ZIndex = 15
+		dot.Parent = loop
+		rounded(dot, UDim.new(0.5, 0))
+	end
+
+	-- ===== cute ear twitch every few seconds =====
 	task.spawn(function()
-		while tailPivot and tailPivot.Parent do
-			wagTime = wagTime + wagSpeed
-			local angle = math.sin(wagTime) * wagAmount
-			tailPivot.Rotation = angle
-			task.wait(0.03)
+		local info = TweenInfo.new(0.08, Enum.EasingStyle.Quad, Enum.EasingDirection.Out, 1, true)
+		local pairsToTwitch = {
+			{leftEar, leftInner, 45 - 8, -10},
+			{rightEar, rightInner, 45 + 8, 10},
+		}
+		while Holder and Holder.Parent do
+			task.wait(math.random(30, 60) / 10)
+			local p = pairsToTwitch[math.random(1, 2)]
+			for i = 1, 2 do
+				TweenService:Create(p[i], info, {Rotation = p[3] + p[4]}):Play()
+			end
 		end
 	end)
+
+	-- ===== UwU in the middle of the window (click it!) =====
+	-- Paste a Roblox audio ID here (e.g. "rbxassetid://123456") for your own uwu sound.
+	-- Left empty, it uses a built-in ping pitched up so it sounds squeaky.
+	local UWU_SOUND_ID = "7140612213"
+
+	local uwuSound = Instance.new("Sound")
+	uwuSound.Name = randomString()
+	uwuSound.SoundId = (UWU_SOUND_ID ~= "" and UWU_SOUND_ID) or "rbxasset://sounds/electronicpingshort.wav"
+	uwuSound.Volume = 0.6
+	uwuSound.Parent = Services.SoundService
+
+	local function playUwu()
+		if UWU_SOUND_ID == "" then
+			-- two quick squeaks: "u-wu"
+			uwuSound.PlaybackSpeed = 1.8
+			uwuSound:Play()
+			task.delay(0.12, function()
+				uwuSound.PlaybackSpeed = 2.3
+				uwuSound:Play()
+			end)
+		else
+			uwuSound.PlaybackSpeed = 1
+			uwuSound:Play()
+		end
+	end
+
+	local uwu = Instance.new("TextButton")
+	uwu.Name = randomString()
+	uwu.AnchorPoint = Vector2.new(0.5, 0.5)
+	uwu.Size = UDim2.new(0, 70, 0, 34)
+	uwu.Position = UDim2.new(0.5, 0, 0.55, 0)
+	uwu.BackgroundTransparency = 1
+	uwu.AutoButtonColor = false
+	uwu.Font = Enum.Font.FredokaOne
+	uwu.Text = "UwU"
+	uwu.TextSize = 28
+	uwu.TextColor3 = Color3.fromRGB(255, 150, 200)
+	uwu.TextTransparency = 0.25
+	uwu.ZIndex = 20
+	uwu.Parent = Holder
+	local uwuStroke = Instance.new("UIStroke")
+	uwuStroke.Color = Color3.fromRGB(28, 24, 34)
+	uwuStroke.Thickness = 1.5
+	uwuStroke.Transparency = 0.3
+	uwuStroke.Parent = uwu
+
+	local bounce = TweenInfo.new(0.12, Enum.EasingStyle.Back, Enum.EasingDirection.Out, 0, true)
+	uwu.MouseButton1Click:Connect(function()
+		playUwu()
+		TweenService:Create(uwu, bounce, {TextSize = 36}):Play()
+	end)
+
+	playUwu() -- squeak once when the GUI opens
 end
 
 Dark.Name = "Dark"
